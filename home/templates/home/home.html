@@ -1,0 +1,70 @@
+{% extends 'home/base.html' %}
+
+{% block body %}
+<div class="container-fluid">
+
+        <form method="post">
+            {%csrf_token%}
+            {{form.text}}
+            <button type="submit">Post</button>
+            <a href="{% url 'home:picturepostupload' %}">X</a>
+             &nbsp;
+            <a href="">refresh</a>
+        </form>
+
+</div>
+<hr>
+
+<div class="container-fluid">
+
+
+    <div class="col-md-6" id="messages">
+{% for post in posts %}
+
+
+
+
+
+
+        <h4>{{ post.text }}</h4>
+
+        <a href="{% url 'home:home' %}profile/{{ post.user.username}}">{{ post.user.username}}</a> - {{ post.time }}
+        {% if post.user == request.user %}
+        <a href="{% url 'home:home' %}post/{{post.pk}}/delete">delete</a>
+        <a href="{% url 'home:home' %}post/{{post.pk}}/edit">edit</a>
+        {% endif %}    <br />
+            {{ post.number_of_likes }} Likes &nbsp;
+        {% if not request.user in post.user_like.all %}
+            <a href="{% url 'home:home' %}post/{{post.pk}}/like"><strong class="likebutton">like</strong></a>
+        {% else %}
+            <a href="{% url 'home:home' %}post/{{post.pk}}/unlike"><strong class="likebutton">unlike</strong></a>
+        {% endif %}
+
+
+
+
+
+<br />
+
+{% endfor %}
+    </div>
+    </div>
+
+
+
+<div class="pagination">
+    <span class="step-links">
+        {% if posts.has_previous %}
+            <a href="?page=1">&laquo; latest &nbsp; </a>
+            <a href="?page={{ posts.previous_page_number }}">  previous &nbsp;  </a>
+        {% endif %}
+
+
+
+        {% if posts.has_next %}
+            <a href="?page={{ posts.next_page_number }}">   next  </a>
+
+        {% endif %}
+    </span>
+</div>
+{% endblock %}

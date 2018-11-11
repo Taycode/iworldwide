@@ -1,0 +1,14 @@
+{% extends 'home/base.html' %}
+
+{% block body %}
+<div class="container-fluid">
+    <h1>Message - Recently Online</h1>
+
+    <hr />
+    {% for user in users %}
+    {% if not user == request.user %}
+  <h3>  <a href="{% url 'message:home' %}{{user.username}}">{{user}}</a> </h3>
+    {% endif %}
+    {% endfor %}
+</div>
+{% endblock %}

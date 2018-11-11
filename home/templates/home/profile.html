@@ -1,0 +1,95 @@
+{% extends 'home/base.html' %}
+{% block body %}
+<div class="container-fluid">
+<h1 id="profile-name-and-image">
+    <a href="{{profile.image.url}}"> <img width="100" height="75" class="img-circle" src="{{profile.image.url}}"></a>  {{user.username}}'s profile</h1>
+<hr>
+    <div>
+        <div class="col-md-6" id="profile_info">
+                <div>
+
+                <a href="#">{{following}} following</a>   |   <a href="{% url 'home:followers' user.username %}">{{followers}} followers</a>  <br />
+                First name: {{user.first_name}} <br>
+                Last name: {{user.last_name}} <br>
+                Email address: {{user.email}} <br>
+                Country: {{profile.country}} <br>
+                Occupation: {{profile.occupation}} <br>
+                Company: {{profile.company}}
+
+                </div>
+                <br />
+                <br />
+            {% if myboolean %}
+                <a href="change/"> edit profile </a>
+                <a href="{% url 'home:changepassword' request.user.username %}">Change Password</a>
+                <a href="{% url 'home:profilepictureupload' request.user.username %}">Upload picture</a>
+                <a href="{% url 'home:profilepicturechange' request.user.username %}">Change profile picture</a>
+            {% else %}
+            {% if not user in friends.friends.all %}
+                <a href="add/"> follow </a><br />
+            {% else %}
+            Following
+                <a href="delete/"> unfollow </a><br />
+            {% endif %}
+                <a href="{% url 'message:home' %}{{user.username}}">Message</a> <br />
+            {% endif %}
+            </div>
+
+        <div class="col-md-6" id="user_post">
+
+            {% for post in posts %}
+
+
+
+
+
+
+            <h4>{{ post.text }}</h4>
+
+            <a href="{% url 'home:home' %}profile/{{ post.user.username}}">{{ post.user.username}}</a> - {{ post.time }}
+            {% if post.user == request.user %}
+            <a href="{% url 'home:home' %}post/{{post.pk}}/delete">delete</a>
+            <a href="{% url 'home:home' %}post/{{post.pk}}/edit">edit</a>
+            {% endif %}    <br />
+                {{ post.number_of_likes }} Likes &nbsp;
+            {% if not request.user in post.user_like.all %}
+                <a href="{% url 'home:home' %}post/{{post.pk}}/like"><strong class="likebutton">like</strong></a>
+            {% else %}
+                <a href="{% url 'home:home' %}post/{{post.pk}}/unlike"><strong class="likebutton">unlike</strong></a>
+            {% endif %}
+
+
+
+
+
+    <br />
+
+    {% endfor %}
+
+               <div class="pagination">
+    <span class="step-links">
+        {% if posts.has_previous %}
+            <a href="?page=1">&laquo; latest &nbsp; </a>
+            <a href="?page={{ posts.previous_page_number }}">  PREVIOUS &nbsp;  </a>
+        {% endif %}
+
+
+
+        {% if posts.has_next %}
+            <a href="?page={{ posts.next_page_number }}">   NEXT  </a>
+
+        {% endif %}
+    </span>
+        </div>
+        </div>
+
+
+
+
+
+
+    </div>
+</div>
+
+
+{% endblock %}

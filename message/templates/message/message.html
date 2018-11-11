@@ -1,0 +1,36 @@
+{% extends 'home/base.html' %}
+
+{% block body %}
+<div class="container-fluid">
+    <h1>
+        <a href="{{profile.image.url}}">
+            <img width="100" height="75" class="img-circle" src="{{profile.image.url}}">
+        </a>
+        <a href="{% url 'home:home' %}profile/{{ recipient.username }}">{{ recipient.username }}</a>
+    </h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.message }}
+        <button type="submit">Send</button>
+        &nbsp;
+        <a href="">refresh</a>
+    </form>
+
+    <hr>
+    <div class="container">
+    {% for message in messages %}
+
+        <h3>  {{message.message}} </h3>&nbsp;
+        {% if request.user.username == message.sender %}
+        <a href="{% url 'home:home' %}profile/{{ request.user.username}}">You</a> - {{ message.time }}
+        <a href="{% url 'message:home' %}{{ recipient.id }}/{{ message.pk }}/edit">edit </a> &nbsp;
+        <a href="{% url 'message:home' %}{{ recipient.id }}/{{ message.pk }}/delete">delete</a>
+        {% else %}
+         <a href="{% url 'home:home' %}profile/{{ recipient.username }}">{{ recipient.username }}</a> - {{ message.time }}
+        {% endif %}
+        <br />
+        <br />
+    {% endfor %}
+    </div>
+</div>
+{% endblock %}

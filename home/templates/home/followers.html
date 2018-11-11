@@ -1,0 +1,18 @@
+{% extends 'home/base.html' %}
+
+{% block body %}
+<h1 id="profile-name-and-image">
+    <a href="{{profile.image.url}}">
+        <img width="100" height="75" class="img-circle" src="{{profile.image.url}}"></a>
+    <a href="{% url 'home:profile' user.username %}">{{user.username}}</a>'s Followers
+</h1>
+<hr />
+
+<ul>
+    {% for follower in followers %}
+    <li><a href=""> {{follower.username}}</a></li>
+    {% endfor %}
+</ul>
+
+
+{% endblock %}
