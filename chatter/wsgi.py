@@ -1,5 +1,5 @@
 """
-WSGI config for iworldwide project.
+WSGI config for chatter project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
@@ -11,7 +11,7 @@ import os
 from whitenoise.django import DjangoWhiteNoise
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "iworldwide.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "chatter.settings")
 
 application = get_wsgi_application()
 application = DjangoWhiteNoise(application)
