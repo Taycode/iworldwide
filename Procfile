@@ -1,1 +1,1 @@
-web: gunicorn iworldwide.wsgi --log-file -
+web: gunicorn chatter.wsgi --log-file -
