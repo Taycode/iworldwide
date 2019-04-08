@@ -146,7 +146,7 @@ def profilepage(request, username):
     #USER POSTS
     myuser = request.user
     form = PostForm
-    posts = models.Post.objects.filter(user=myuser).order_by('-time')
+    posts = models.Post.objects.filter(user=user).order_by('-time')
     paginator = Paginator(posts, 5)
 
     # get the page parameter from the query string
