@@ -248,7 +248,7 @@ def followerspage(request, username):
     user = User.objects.get(username=username)
     MyFunctions.followers_count(request, username)
     profile = models.UserProfile.objects.get(user=user)
-    args = {'followers': list_of_followers, 'profile':profile}
+    args = {'followers': list_of_followers, 'profile': profile, 'user': user}
     return render(request, 'home/followers.html', args)
 
 def changepassword(request, username):
