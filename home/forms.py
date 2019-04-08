@@ -4,10 +4,16 @@ from home import models
 from django.contrib.auth.models import User
 from django import forms
 
+
 class PostForm(ModelForm):
     class Meta:
         model = models.Post
         fields = ('text',)
+
+
+class LoginForm(forms.Form):
+    email = forms.EmailField(widget=forms.EmailInput)
+    password = forms.CharField(widget=forms.PasswordInput, max_length=50)
 
 
 class RegisterForm(UserCreationForm):

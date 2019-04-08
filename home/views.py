@@ -75,6 +75,37 @@ def home(request):
         return redirect('home:home')
 
 
+def loginView(request):
+    from .forms import LoginForm
+    form = LoginForm
+    if request.method == 'GET':
+        return render(request, 'home/login.html', {'form': form})
+    else:
+        form = LoginForm(request.POST)
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        login_user = User.objects.filter(email=email)
+        if login_user:
+            if login_user.count() == 1:
+                username = login_user.first().username
+                login_user = authenticate(username=username, password=password)
+                print(login_user, email, password)
+                if login_user is not None:
+                    if login_user.is_active:
+                        print('user is active')
+                        login(request, login_user)
+                        return redirect('home:home')
+                    else:
+                        messages.warning(request, 'User is inactive')
+                        return redirect('home:login')
+                else:
+                    messages.error(request, 'Password seems to be incorrect')
+                    return redirect('home:login')
+            else:
+                messages.error(request, 'an account with the inputted email does not exist')
+                return redirect('home:login')
+    return redirect('home:login')
+
 def register(request):
     if request.method == 'GET':
         form = RegisterForm

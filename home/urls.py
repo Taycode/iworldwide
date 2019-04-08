@@ -10,7 +10,7 @@ urlpatterns = [
     #MAINPAGE
     url(r'^home/$', views.home, name='home'),
     #LOGIN PAGE
-    url(r'^home/login/$', login, {'template_name':'home/login.html'}, name='login'),
+    url(r'^home/login/$', views.loginView, name='login'),
     #LOGOUT URL
     url(r'^home/logout/$', logout, {'next_page':'/'}, name='logout'),
     #REGISTRATION PAGE

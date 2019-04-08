@@ -30,6 +30,7 @@ class MyFunctions:
 
 
 def index(request):
+
     users = User.objects.all().order_by('-last_login')
     MyFunctions.paginating(request, users)
 
