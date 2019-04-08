@@ -22,7 +22,6 @@
             {% if myboolean %}
                 <a href="change/"> edit profile </a>
                 <a href="{% url 'home:changepassword' request.user.username %}">Change Password</a>
-                <a href="{% url 'home:profilepictureupload' request.user.username %}">Upload picture</a>
                 <a href="{% url 'home:profilepicturechange' request.user.username %}">Change profile picture</a>
             {% else %}
             {% if not user in friends.friends.all %}
