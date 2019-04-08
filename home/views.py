@@ -97,15 +97,16 @@ def loginView(request):
                         login(request, login_user)
                         return redirect('home:home')
                     else:
-                        messages.warning(request, 'User is inactive')
+                        messages.add_message(request, messages.INFO, 'User is inactive')
                         return redirect('home:login')
                 else:
-                    messages.error(request, 'Password seems to be incorrect')
+                    messages.add_message(request, messages.WARNING , 'Password seems to be incorrect')
                     return redirect('home:login')
             else:
-                messages.error(request, 'an account with the inputted email does not exist')
+                messages.add_message(request, messages.WARNING , 'an account with the inputted email does not exist')
                 return redirect('home:login')
     return redirect('home:login')
+
 
 def register(request):
     if request.method == 'GET':
