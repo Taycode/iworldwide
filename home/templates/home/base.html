@@ -22,7 +22,7 @@
             {% else %}
             <ul class="nav navbar-nav">
                 <li><a href="{% url 'message:home' %}">Message</a></li>
-                <li><a href="{% url 'home:home' %}profile/{{ myuser.username}}"> {{myuser.username}}</a></li>
+                <li><a href="{% url 'home:home' %}profile/{{ request.user.username}}"> {{request.user.username}}</a></li>
                 <li><a href="{% url 'home:logout' %}"> Logout</a></li>
             </ul>
             {% endif %}
