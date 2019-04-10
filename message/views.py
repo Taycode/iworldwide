@@ -42,41 +42,42 @@ def index(request):
 
 def message(request, username):
 
-    recipient = User.objects.get(username = username)
-    recipient_profile = home_models.UserProfile.objects.get(user=recipient)
-    if request.method == 'GET':
-        themessages = []
-        form = forms.MessageForm()
-        myuser = request.user
-        messages = models.Message.objects.all().order_by('-time')
-        for message in messages:
-            if myuser in message.users.all() and recipient in message.users.all():
-                themessages.append(message)
-        count = 0
-        for chatmessage in themessages:
-            if chatmessage.read == True and chatmessage.sender == recipient.username:
-                count += 1
-                chatmessage.read = False
-                chatmessage.save()
-        print(count)
-        MyFunctions.paginating(request, themessages)
-        messages = page_object
+    recipient = User.objects.get(username=username)
 
-        args = {'messages': messages, 'form':form, 'recipient':recipient, 'myuser':myuser, 'profile':recipient_profile}
-        return render(request, 'message/message.html', args)
+    if request.method == 'GET':
+        form = forms.MessageForm(request.POST or None)
+        arg = {'form': form}
+        try:
+            conversation = models.Conversations.objects.filter(users_involved=recipient).filter(
+                users_involved=request.user).first()
+            print(conversation)
+            conversation = conversation.messages.all()
+            arg['conversation'] = conversation
+
+        except:
+            pass
+
+        return render(request, 'message/message.html', arg)
 
     elif request.method == 'POST':
 
         form = forms.MessageForm(request.POST or None)
         if form.is_valid():
-            new = models.Message.objects.create()
+            new = models.Message.objects.create(user=request.user)
             new.message = form.cleaned_data['message']
-            new.sender = request.user.username
-            new.recipient = recipient.username
-            new.users.add(request.user)
-            new.users.add(recipient)
             new.save()
+            try:
+                conversation = models.Conversations.objects.filter(users_involved=recipient).filter(
+                    users_involved=request.user).first()
+                print(conversation)
+                conversation.messages.add(new)
+                conversation.save()
 
+            except:
+                conversation = models.Conversations.objects.create()
+                conversation.users_involved.add(recipient, request.user)
+                conversation.messages.add(new)
+                conversation.save()
 
 
         return redirect('/message/%s' %recipient.username)

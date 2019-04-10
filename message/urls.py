@@ -1,11 +1,11 @@
-from django.conf.urls import url, include
+from django.urls import path, include
 from message import views
 from django.contrib.auth.views import login, logout
 
 urlpatterns = [
-    url(r'^$', views.index, name='home'),
-    url(r'^(?P<username>[A-Za-z0-9]+)/$', views.message, name='message'),
-    url(r'^(?P<username>[A-Za-z0-9]+)/(?P<message_id>[A-Za-z0-9]+)/edit/$', views.editmessage, name='editmessage'),
-    url(r'^(?P<username>[A-Za-z0-9]+)/(?P<message_id>[A-Za-z0-9]+)/delete/$', views.deletemessage, name='deletemessage'),
+    path('', views.index, name='home'),
+    path('<str:username>/', views.message, name='message'),
+    path('<str:username>/<int:message_id>)/edit/', views.editmessage, name='editmessage'),
+    path('<str:username>/<int:message_id>)/delete/', views.deletemessage, name='deletemessage'),
 
 ]

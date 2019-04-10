@@ -18,15 +18,15 @@
 
     <hr>
     <div class="container">
-    {% for message in messages %}
+    {% for message in conversation %}
 
         <h3>  {{message.message}} </h3>&nbsp;
-        {% if request.user.username == message.sender %}
+        {% if request.user.username == message.user.username %}
         <a href="{% url 'home:home' %}profile/{{ request.user.username}}">You</a> - {{ message.time }}
         <a href="{% url 'message:home' %}{{ recipient.id }}/{{ message.pk }}/edit">edit </a> &nbsp;
         <a href="{% url 'message:home' %}{{ recipient.id }}/{{ message.pk }}/delete">delete</a>
         {% else %}
-         <a href="{% url 'home:home' %}profile/{{ recipient.username }}">{{ recipient.username }}</a> - {{ message.time }}
+         <a href="{% url 'home:home' %}profile/{{ message.user.username }}">{{ message.user.username }}</a> - {{ message.time }}
         {% endif %}
         <br />
         <br />
