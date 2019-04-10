@@ -21,7 +21,7 @@ from django.conf.urls.static import static
 urlpatterns = [
     url('admin/', admin.site.urls),
     url('', include(('home.urls', 'home'), namespace='home')),
-    url('message', include(('message.urls', 'message'), namespace='message')),
+    url('message/', include(('message.urls', 'message'), namespace='message')),
     # RESET PASSWORD
     url(r'^reset/$', auth_views.PasswordResetView.as_view(), name='password_reset'),
     # RESET PASSWORD DONE
