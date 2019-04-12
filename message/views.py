@@ -8,6 +8,8 @@ from datetime import datetime
 
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 page_object = []
+
+
 class MyFunctions:
     def paginating(request, object):
         global page_object
@@ -31,12 +33,10 @@ class MyFunctions:
 
 def index(request):
 
-    users = User.objects.all().order_by('-last_login')
-    MyFunctions.paginating(request, users)
-
-    users = page_object
-    myuser = request.user
-    args = {'users':users,'myuser':myuser}
+    conversations = models.Conversations.objects.all().order_by('-last_updated')
+    MyFunctions.paginating(request, conversations)
+    conversations = page_object
+    args = {'conversations': conversations}
     return render(request, 'message/index.html', args)
 
 
@@ -51,7 +51,7 @@ def message(request, username):
             conversation = models.Conversations.objects.filter(users_involved=recipient).filter(
                 users_involved=request.user).first()
             print(conversation)
-            conversation = conversation.messages.all()
+            conversation = conversation.messages.all().order_by('-time')
             arg['conversation'] = conversation
 
         except:
@@ -71,6 +71,7 @@ def message(request, username):
                     users_involved=request.user).first()
                 print(conversation)
                 conversation.messages.add(new)
+                conversation.last_message = new
                 conversation.save()
 
             except:

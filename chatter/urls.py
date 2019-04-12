@@ -14,18 +14,19 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.conf.urls import url, include
+from django.urls import path, include
+from django.conf.urls import url
 from django.contrib.auth import views as auth_views
 from django.conf import settings
 from django.conf.urls.static import static
 urlpatterns = [
     url('admin/', admin.site.urls),
-    url('', include(('home.urls', 'home'), namespace='home')),
-    url('message/', include(('message.urls', 'message'), namespace='message')),
+    path('', include(('home.urls', 'home'), namespace='home')),
+    path('message/', include(('message.urls', 'message'), namespace='message')),
     # RESET PASSWORD
-    url(r'^reset/$', auth_views.PasswordResetView.as_view(), name='password_reset'),
+    path('reset/', auth_views.PasswordResetView.as_view(), name='password_reset'),
     # RESET PASSWORD DONE
-    url(r'^reset/done/', auth_views.password_reset_done, name='password_reset_done'),
+    path('reset/done/', auth_views.password_reset_done, name='password_reset_done'),
     # RESET CONFIRM
     url(r'^reset/confirm/(?P<uidb64>[A-Za-z0-9]+)-(?P<token>)', auth_views.PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
     # RESET COMPLETE

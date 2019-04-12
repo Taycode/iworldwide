@@ -5,10 +5,8 @@
     <h1>Message - Recently Online</h1>
 
     <hr />
-    {% for user in users %}
-    {% if not user == request.user %}
-  <h3>  <a href="{% url 'message:home' %}{{user.username}}">{{user}}</a> </h3>
-    {% endif %}
+    {% for conversation in conversations %}
+  <h3>  <a href="{% url 'message:home' %}{{conversation.user}}">{{user}}</a> </h3>
     {% endfor %}
 </div>
 {% endblock %}

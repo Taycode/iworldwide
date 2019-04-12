@@ -1,3 +1,4 @@
+from django.urls import path
 from django.conf.urls import url, include
 from home import views
 from django.contrib.auth.views import login, logout, password_reset_done
@@ -6,39 +7,39 @@ from django.conf import settings
 from django.conf.urls.static import static
 urlpatterns = [
     #HOMEPAGE
-    url(r'^$', views.index, name='homepage'),
+    path('', views.index, name='homepage'),
     #MAINPAGE
-    url(r'^home/$', views.home, name='home'),
+    path('home/', views.home, name='home'),
     #LOGIN PAGE
-    url(r'^home/login/$', views.loginView, name='login'),
+    path('home/login/', views.loginView, name='login'),
     #LOGOUT URL
-    url(r'^home/logout/$', logout, {'next_page':'/'}, name='logout'),
+    path('home/logout/', logout, {'next_page': '/'}, name='logout'),
     #REGISTRATION PAGE
-    url(r'^home/register/$', views.register, name='register'),
+    path('home/register/', views.register, name='register'),
     #PROFILE PAGE
-    url(r'^home/profile/(?P<username>[A-Za-z0-9]+)/$', views.profilepage, name='profile'),
+    path('home/profile/<str:username>/', views.profilepage, name='profile'),
     #PASSWORD CHANGE
-    url(r'^home/profile/(?P<username>[A-Za-z0-9]+)/changepassword/$', views.changepassword, name='changepassword'),
+    path('home/profile/<str:username>/changepassword/$', views.changepassword, name='changepassword'),
     #LIST OF FOLLOWERS PAGE
-    url(r'^home/profile/(?P<username>[A-Za-z0-9]+)/followers/$', views.followerspage, name='followers'),
+    path('home/profile/<str:username>/followers/', views.followerspage, name='followers'),
     #CHANGE OF PROFILE
-    url(r'^home/profile/(?P<username>[A-Za-z0-9]+)/change/$', views.profilechange, name='profilechange'),
+    path('home/profile/<str:username>/change/', views.profilechange, name='profilechange'),
     #DELETE POST
-    url(r'^home/post/(?P<pk>[0-9]+)/delete/$', views.deletepost, name='deletepost'),
+    path('home/post/<int:pk>/delete/', views.deletepost, name='deletepost'),
     #EDIT POST
-    url(r'^home/post/(?P<pk>[0-9]+)/edit/$', views.editpost, name='editpost'),
+    path('home/post/<int:pk>/edit/', views.editpost, name='editpost'),
     #LIKE POST
-    url(r'^home/post/(?P<pk>[0-9]+)/like/$', views.likepost, name='likepost'),
+    path('home/post/<int:pk>/like/', views.likepost, name='likepost'),
     #UNLIKE POST
-    url(r'^home/post/(?P<pk>[0-9]+)/unlike/$', views.unlikepost, name='unlikepost'),
+    path('home/post/<int:pk>/unlike/', views.unlikepost, name='unlikepost'),
     #FOLLOW
-    url(r'^home/profile/(?P<username>[A-Za-z0-9]+)/add/$', views.addfriend, name='addfriend'),
+    path('home/profile/<str:username>/add/', views.addfriend, name='addfriend'),
     #UNFOLLOW
-    url(r'^home/profile/(?P<username>[A-Za-z0-9]+)/delete/$', views.deletefriend, name='unfriend'),
+    path('home/profile/<str:username>/delete/', views.deletefriend, name='unfriend'),
     #CHANGE PROFILE PICTURE
-    url(r'^home/profile/(?P<username>[A-Za-z0-9]+)/change_profilepicture', views.changeprofilepicture, name='profilepicturechange'),
+    path('home/profile/<str:username>/change_profilepicture', views.changeprofilepicture, name='profilepicturechange'),
     #UPLOAD PICTURE
-    url(r'^home/profile/(?P<username>[A-Za-z0-9]+)/upload_picture/$', views.picture_upload, name='profilepictureupload'),
+    path('home/profile/<str:username>/upload_picture/', views.picture_upload, name='profilepictureupload'),
 
 
 

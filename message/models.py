@@ -12,7 +12,12 @@ class Message(models.Model):
         return self.user.username + ' - ' + ': ' + self.message[:10]
 
 
+default_message = Message.objects.get(pk=1)
+
+
 class Conversations(models.Model):
+
     users_involved = models.ManyToManyField(User)
     messages = models.ManyToManyField(Message)
-
+    last_updated = models.DateTimeField(auto_now=True)
+    last_message = models.ForeignKey(Message, related_name='+', on_delete=models.CASCADE, blank=True, null=True)
