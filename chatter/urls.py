@@ -20,7 +20,7 @@ from django.contrib.auth import views as auth_views
 from django.conf import settings
 from django.conf.urls.static import static
 urlpatterns = [
-    url('admin/', admin.site.urls),
+    path('admin/', admin.site.urls),
     path('', include(('home.urls', 'home'), namespace='home')),
     path('message/', include(('message.urls', 'message'), namespace='message')),
     # RESET PASSWORD

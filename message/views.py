@@ -84,18 +84,6 @@ def message(request, username):
         return redirect('/message/%s' %recipient.username)
 
 
-def editmessage(request, username, message_id):
-    the_message = models.Message.objects.get(pk=message_id)
-    user = User.objects.get(username=username)
-    form = forms.MessageForm(request.POST or None, instance=the_message)
-    if request.method == 'GET':
-        args = {'form':form}
-        return render(request, 'message/editmessage.html', args)
-    if request.method == 'POST':
-        if form.is_valid():
-            form.save()
-            return redirect('/message/%s'%user.id)
-
 def deletemessage(request, username, message_id):
     the_message = models.Message.objects.get(pk=message_id)
     user = User.objects.get(username=username)

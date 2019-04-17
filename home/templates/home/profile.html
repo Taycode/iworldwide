@@ -8,7 +8,7 @@
         <div class="col-md-6" id="profile_info">
                 <div>
 
-                <a href="#">{{following}} following</a>   |   <a href="{% url 'home:followers' user.username %}">{{followers}} followers</a>  <br />
+                <a href="#">{{following.count}} following</a>   |   <a href="{% url 'home:followers' user.username %}">{{followers.count}} followers</a>  <br />
                 First name: {{user.first_name}} <br>
                 Last name: {{user.last_name}} <br>
                 Email address: {{user.email}} <br>
@@ -24,7 +24,7 @@
                 <a href="{% url 'home:changepassword' request.user.username %}">Change Password</a>
                 <a href="{% url 'home:profilepicturechange' request.user.username %}">Change profile picture</a>
             {% else %}
-            {% if not user in friends.friends.all %}
+            {% if not request.user in profile.followers.all %}
                 <a href="add/"> follow </a><br />
             {% else %}
             Following

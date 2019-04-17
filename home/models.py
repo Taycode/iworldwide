@@ -23,8 +23,22 @@ class UserProfile(models.Model):
     company = models.CharField(max_length=100, blank=True)
     country = models.CharField(max_length=100, blank=True)
     image = models.FileField(upload_to='profile_image', default='profile_image/codes.png')
+    followers = models.ManyToManyField(User, related_name='+')
+    following = models.ManyToManyField(User, related_name='+')
     def __str__(self):
         return self.user.username
+
+    def count_followers(self):
+        return self.followers.count()
+
+    def count_following(self):
+        return self.following.count()
+
+    def list_of_followers(self):
+        return self.followers.all()
+
+    def list_of_following(self):
+        return self.following.all()
 
 
 def createprofile(sender, **kwargs):
@@ -34,18 +48,6 @@ def createprofile(sender, **kwargs):
 post_save.connect(createprofile, sender=User)
 
 
-class Friends(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    friends = models.ManyToManyField(User, related_name='+')
-    def __str__(self):
-        return self.user.username
-
-
-def createfriends(sender, **kwargs):
-    if kwargs['created']:
-        Friends.objects.create(user=kwargs['instance'])
-
-post_save.connect(createfriends, sender=User)
 
 
 class User_Pictures(models.Model):

@@ -10,7 +10,7 @@
 
 <ul>
     {% for follower in followers %}
-    <li><a href=""> {{follower.username}}</a></li>
+    <li><a href="{% url 'home:profile' follower.username %}"> {{follower.username}}</a></li>
     {% endfor %}
 </ul>
 

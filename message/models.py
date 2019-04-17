@@ -12,7 +12,6 @@ class Message(models.Model):
         return self.user.username + ' - ' + ': ' + self.message[:10]
 
 
-default_message = Message.objects.get(pk=1)
 
 
 class Conversations(models.Model):

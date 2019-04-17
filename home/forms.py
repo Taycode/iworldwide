@@ -24,7 +24,7 @@ class RegisterForm(UserCreationForm):
 class ProfileChangeForm(ModelForm):
     class Meta:
         model = models.UserProfile
-        exclude = ('user','image')
+        exclude = ('user','image', 'following', 'followers')
 
 
 class Picture_Upload(ModelForm):

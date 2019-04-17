@@ -10,29 +10,6 @@ from django.contrib.auth import login, authenticate
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib import messages
 
-list_of_followers = []
-class MyFunctions:
-    def followers_count(request, username):
-        global list_of_followers
-        global followers
-        the_user = User.objects.get(username=username)
-        followers_list = []
-        users = models.Friends.objects.all()
-        for user in users:
-            if the_user in user.friends.all():
-                followers_list.append(user)
-        list_of_followers = followers_list
-        followers = len(followers_list)
-        return followers, list_of_followers
-
-    def following_count(request, username):
-        global following
-        the_user = User.objects.get(username=username)
-        user = models.Friends.objects.get(user=the_user)
-        followers = user.friends.all()
-
-        following = len(followers)
-        return following
 
 def index(request):
     return redirect('home:home')
@@ -130,21 +107,15 @@ def register(request):
         return render(request, 'home/register.html', {'form':form})
 
 
-following = 0
-followers = 0
-
 def profilepage(request, username):
 
-    MyFunctions.followers_count(request, username)
-    myuser = request.user
-    MyFunctions.following_count(request, username)
-    user_friends = models.Friends.objects.get(user=request.user)
     user = User.objects.get(username=username)
-    myboolean = myuser == user
     profile = models.UserProfile.objects.get(user=user)
+    myboolean = user == request.user
+    followers = profile.list_of_followers()
+    following = profile.list_of_following()
 
     #USER POSTS
-    myuser = request.user
     form = PostForm
     posts = models.Post.objects.filter(user=user).order_by('-time')
     paginator = Paginator(posts, 5)
@@ -164,10 +135,8 @@ def profilepage(request, username):
         page_object = paginator.page(paginator.num_pages)
     theposts = page_object
 
-    args = {'user':user,
-            'profile':profile, 'myuser':myuser,
-            'myboolean':myboolean, 'friends':user_friends,
-            'posts':theposts,
+    args = {'user':user, 'profile':profile,
+            'myboolean':myboolean,'posts':theposts,
             'following':following, 'followers':followers
             }
     return render(request, 'home/profile.html', args)
@@ -213,20 +182,24 @@ def editpost(request, pk):
             return redirect('home:home')
 
 
-def addfriend(request, username):
-    user_friends = models.Friends.objects.get(user=request.user)
-    other_user = User.objects.get(username=username)
-    user_friends.friends.add(other_user)
-    return redirect('home:profile', username=other_user.username)
+def follow(request, username):
+    user = User.objects.get(username=username)
+    my_profile = models.UserProfile.objects.get(user=request.user)
+    profile = models.UserProfile.objects.get(user=user)
+    my_profile.following.add(user)
+    profile.followers.add(request.user)
+    return redirect('home:profile', username=username)
 
-def deletefriend(request, username):
-    user_friends = models.Friends.objects.get(user=request.user)
-    other_user = User.objects.get(username=username)
-    user_friends.friends.remove(other_user)
-    return redirect('home:profile', username=other_user.username)
+def unfollow(request, username):
+    user = User.objects.get(username=username)
+    my_profile = models.UserProfile.objects.get(user=request.user)
+    profile = models.UserProfile.objects.get(user=user)
+    my_profile.following.remove(user)
+    profile.followers.remove(request.user)
+    return redirect('home:profile', username=username)
 
 
-def likepost(request, pk):
+def like_post(request, pk):
     user = request.user
     post = models.Post.objects.get(pk=pk)
     post.number_of_likes += 1
@@ -235,7 +208,7 @@ def likepost(request, pk):
     return redirect('home:home')
 
 
-def unlikepost(request, pk):
+def unlike_post(request, pk):
     post = models.Post.objects.get(pk=pk)
     user = request.user
     post.user_like.remove(user)
@@ -244,10 +217,10 @@ def unlikepost(request, pk):
     return redirect('home:home')
 
 
-def followerspage(request, username):
+def followers_page(request, username):
     user = User.objects.get(username=username)
-    MyFunctions.followers_count(request, username)
     profile = models.UserProfile.objects.get(user=user)
+    list_of_followers = profile.list_of_followers()
     args = {'followers': list_of_followers, 'profile': profile, 'user': user}
     return render(request, 'home/followers.html', args)
 
